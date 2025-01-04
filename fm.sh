@@ -33,7 +33,7 @@ show_help() {
 	echo "Q - Quits out of script"
 	echo -e "M - Engages ${BLUE}'mkdir'${NORMAL} to make directories (type MM for superuser permission)"
 	echo -e "R - Engages ${RED}'rm -rf'${NORMAL} to ${RED}forcefully and recursively${NORMAL} remove a dir or file (type RR for superuser permission)"
-	echo -e "O - Engages ${LIGHTBLUE}'mv'${NORMAL} to ${LIGHTBLUE}move or rename things${NORMAL} (type OO for superuser permission)"
+	echo -e "O - Engages ${LIGHTBLUE}'mv'${NORMAL} to ${LIGHTBLUE}move or rename things${NORMAL}(Renaming happens in the same directory) (type OO for superuser permission)"
 	echo -e "X - \033[33;1mExecutes${NORMAL} commands outside of already existing choices${NORMAL}"
 	echo -e "${YELLOW}------------------------"
 	echo -e "\nSome other meaningless stuff:"
@@ -54,10 +54,10 @@ makedir() {
 	clear
 	ls --color=auto
 	echo -e "You are here: ${LIGHTBLUE}\033[2m$(pwd)${NORMAL}"
-	echo -e "Where to make directory? \033[37;2;3m(PATH first and then NAME)${NORMAL}: "
+	echo -e "Where to make directory? \033[37;2;3m(usage: PATH/TO/DIR_TO_MAKE): ${NORMAL}: "
 	read -r dir_placename
 	if [[ -z "$dir_placename" ]]; then
-        echo -e "${RED}You must answer!... no i am not kidding :/${NORMAL}"
+        echo -e "${RED}Please answer! (usage: PATH_TO_MAKE_DIR): ${NORMAL}"
         return
 	else
         mkdir "$dir_placename"
@@ -65,13 +65,13 @@ makedir() {
 	fi
 
 	if [[ -d "$dir_placename" ]]; then
-	        echo "${RED}Directory already exists in said place${NORMAL}"
+	        echo "${RED}Directory already exists!${NORMAL}"
 	else
         mkdir "$dir_placename"
         if [[ $? -eq 0 ]]; then
                 mkdir "$dir_placename"
 	else
-        echo "${RED}\033[1mCouldn't make directory :("
+        echo "${RED}\033[1mCould not make directory :("
         fi
 fi
 clear
@@ -82,10 +82,10 @@ sumakedir() {
 	clear
 	ls --color=auto
 	echo -e "You are here: ${LIGHTBLUE}\033[2m$(pwd)${NORMAL}"
-	echo "Where to make, what directory? (su) \033[37;2;3m(PATH first and then NAME)${NORMAL}: "
+	echo "Where to make, what directory? (su) \033[37;2;3m(PATH/TO/MAKE/DIR_TO_MAKE): ${NORMAL}: "
 	read -r dir_placename
 	if [[ -z "$dir_placename" ]]; then
-		echo -e "${RED}You must answer!... no i am not kidding :/${NORMAL}"
+		echo -e "${RED}Please answer! (usage: PATH_TO_MAKE_DIR): ${NORMAL}"
 		return
 	else
 		sudo mkdir "$dir_placename"
@@ -93,14 +93,14 @@ sumakedir() {
 	fi
 
 	if [[ -d "$dir_placename" ]]; then
-		echo "${RED}Directory already exists in said place${NORMAL}"
+		echo "${RED}Directory already exists!${NORMAL}"
 	else
 	        sudo mkdir "$dir_placename"
 	fi
 	if [[ $? -eq 0 ]]; then
 		sudo mkdir "$dir_placename"
 	else
-		echo "\033[31;1mCouldn't make directory :("
+		echo "\033[31;1mCould not make directory :("
 	fi
 clear
 }
@@ -111,10 +111,10 @@ remove() {
 	clear
 	ls --color=auto
 	echo -e "You are here: ${LIGHTBLUE}\033[2m$(pwd)${NORMAL}"
-	echo -e "What to remove? \033[37;2;3m(PATH first and then NAME)${NORMAL}: "
+	echo -e "What to remove? \033[37;2;3m(PATH/TO/DIR_OR_FILE): ${NORMAL}: "
 	read -r toberemoved
 	if [[ -z "$toberemoved" ]]; then
-		echo -e "${RED}You'd need to answer though, removing nothing is not doing anything!${NORMAL}"
+		echo -e "${RED}Please answer! (usage: PATH/TO/FILE_OR_DIR): ${NORMAL}"
 		return
 	fi
 	if [[ -e "$toberemoved" ]]; then
@@ -135,10 +135,10 @@ suremove() {
 	clear
 	ls --color=auto
 	echo -e "You are here: ${LIGHTBLUE}\033[2m$(pwd)${NORMAL}"
-        echo -e "What to remove\033[37;2;3m(su)${NORMAL}? \033[37;2;3m(PATH first and then NAME)${NORMAL}: "
+        echo -e "What to remove\033[37;2;3m(su)${NORMAL}? \033[37;2;3m(PATH or/and FILENAME , PATH2 or/and FILENAME2)${NORMAL}: "
         read -r toberemoved
 	if [[ -z "$toberemoved" ]]; then
-        	echo -e "${RED}You'd need to answer though, removing nothing is not doing anything!${NORMAL}"
+        	echo -e "${RED}Please answer! (usage: PATH/NAME_OF_FILE_OR_DIR): ${NORMAL}"
         	return
 	fi
 	if [[ -e "$toberemoved" ]]; then
@@ -159,10 +159,10 @@ rennmov() {
 	clear
 	ls --color=auto
 	echo -e "You are here: ${LIGHTBLUE}\033[2m$(pwd)${NORMAL}"
-	echo -e "What to move/rename?\033[37;2;3m(usage: PATH or/and FILENAME PATH2 or and FILENAME2): "
+	echo -e "What to move/rename?\033[37;2;3m(usage: PATH or/and FILENAME , PATH2 or/and FILENAME2): "
 	read -r renammov renammov2
 	if [[ -z "$renammov" || "$renammov2" ]]; then
-		echo -e "${RED}Please answer! (usage: PATH/FILENAME PATH2/FILENAME)${NORMAL}"
+		echo -e "${RED}Please answer! (usage: PATH/NAME_OF_FILE_OR_DIR): ${NORMAL}"
 		return
 	fi
 	if [[ -e "$renammov" || "$renammov2" ]]; then
@@ -181,10 +181,10 @@ surennmov() {
 	clear
 	ls --color=auto
 	echo -e "You are here: ${LIGHTBLUE}\033[2m$(pwd)${NORMAL}"
-	echo -e "What to move/rename?\033[37;2;3m(\033[32;5m(su)\033[37;2;3musage: PATH or/and FILENAME PATH2 or and FILENAME2): "
+	echo -e "What to move/rename?\033[37;2;3m(\033[32;5m(su)\033[37;2;3m(usage: PATH1/FILENAME PATH2/FILENAME): "
 	read -r renammov renammov2
 	if [[ -z "$renammov" || "$renammov2" ]]; then
-		echo -e "${RED}Please answer! (usage: PATH/FILENAME PATH2/FILENAME)${NORMAL}"
+		echo -e "${RED}Please answer! (usage: PATH/FILENAME PATH2/FILENAME): ${NORMAL}"
 		return
 	fi
 	if [[ -e "$renammov" || "$renammov2" ]]; then
@@ -206,7 +206,7 @@ touchy() {
 	echo -e "What to create?\033[37;2;3m(usage: path/to/dir/)${NORMAL}: "
 	read -r createplace
 	if [[ -z "$createplace" ]]; then
-		echo "${RED}Please specify the correct path, and not leave the space empty, thank you!${NORMAL}"
+		echo "${RED}Please answer: (usage: PATH/TO/DIR): ${NORMAL}"
 		return
 	fi
 	if [[ -e "$createplace" ]]; then
@@ -274,7 +274,7 @@ do
 #		sutouchy
 #		;;
 	*)
-		echo -e "\033[5;31mInvalid Command (Type H for help)" # As said... H FOR HELP!
+		echo -e "\033[5;31mInvalid Command (Type H for help)" # As said... H FOR HELP! :D
 		;;
 	esac
 done
