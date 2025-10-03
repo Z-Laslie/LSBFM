@@ -1,5 +1,5 @@
 # LSBFM
 Laslie's Simple Bash File Manager
 
-Is it as simple as it can get...
+I'm gonna do some serious changes here, babyyyyy!!!
 Made by a beginner at programming
